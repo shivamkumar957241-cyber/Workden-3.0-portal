@@ -1,0 +1,5 @@
+"name","reward","description","page_route","id","created_date","updated_date","created_by_id","created_by","is_sample"
+"Data Entry","200","Fill in data entry forms with provided information. Complete 65 items per session.","DataEntry","69cc839edfcefd0c92a3f11a","2026-04-01T02:31:58.621000","2026-04-01T02:31:58.621000","69c78a963cd6683d792802fc","tiwariutsav108@gmail.com","false"
+"Form Filling","225","Fill online forms with accurate data. Complete multiple forms per session.","FormFilling","69cc839edfcefd0c92a3f11b","2026-04-01T02:31:58.621000","2026-04-02T08:15:16.581000","69c78a963cd6683d792802fc","tiwariutsav108@gmail.com","false"
+"PDF to Word Typing","200","Type content from PDF documents into Word format with high accuracy.","PdfToWordTyping","69cc839edfcefd0c92a3f11d","2026-04-01T02:31:58.621000","2026-04-03T04:05:51.241000","69c78a963cd6683d792802fc","tiwariutsav108@gmail.com","false"
+"Grammar Correction","200","Correct grammatical errors in given text passages with precision.","GrammarCorrection","69cc839edfcefd0c92a3f11e","2026-04-01T02:31:58.621000","2026-04-03T04:06:00.314000","69c78a963cd6683d792802fc","tiwariutsav108@gmail.com","false"

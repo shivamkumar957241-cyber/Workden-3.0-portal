@@ -1,0 +1,389 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .wl-root {
+    min-height: 100vh;
+    display: flex;
+    font-family: 'Inter', sans-serif;
+    background: #eef0f5;
+  }
+
+  /* ════════════ LEFT PANEL ════════════ */
+  .wl-left {
+    width: 48%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 44px 48px;
+  }
+
+  .wl-left-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80');
+    background-size: cover;
+    background-position: center bottom;
+    z-index: 0;
+  }
+
+  .wl-left-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      160deg,
+      rgba(10, 18, 50, 0.93) 0%,
+      rgba(14, 24, 70, 0.88) 40%,
+      rgba(20, 30, 90, 0.80) 100%
+    );
+    z-index: 1;
+  }
+
+  .wl-left-dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    z-index: 2;
+  }
+
+  .wl-left-inner {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .wl-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .wl-brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+
+  .wl-brand-icon img { width: 100%; height: 100%; object-fit: cover; }
+
+  .wl-brand-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+
+  .wl-brand-name span { color: #4f8ef7; }
+
+  .wl-accent-line {
+    width: 36px; height: 3px;
+    background: linear-gradient(90deg, #4f8ef7, #6366f1);
+    border-radius: 2px;
+    margin-top: 14px;
+    margin-bottom: 36px;
+  }
+
+  .wl-hero-title {
+    font-size: clamp(28px, 2.8vw, 42px);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    margin-bottom: 18px;
+    letter-spacing: -0.5px;
+  }
+
+  .wl-hero-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.65;
+    max-width: 340px;
+    font-weight: 400;
+    margin-bottom: 44px;
+  }
+
+  .wl-features { display: flex; flex-direction: column; gap: 22px; }
+
+  .wl-feat {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .wl-feat-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(79,142,247,0.18);
+    border: 1.5px solid rgba(79,142,247,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .wl-feat-text { display: flex; flex-direction: column; gap: 3px; }
+
+  .wl-feat-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .wl-feat-desc {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* ════════════ RIGHT PANEL ════════════ */
+  .wl-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 40px;
+    background: #eef0f5;
+  }
+
+  .wl-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 44px 40px 36px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  .wl-lock-wrap {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: #eef0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+  }
+
+  .wl-card-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 6px;
+    letter-spacing: -0.4px;
+  }
+
+  .wl-card-sub {
+    text-align: center;
+    font-size: 14px;
+    color: #94a3b8;
+    margin-bottom: 32px;
+    font-weight: 400;
+  }
+
+  .wl-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    border-radius: 10px;
+    color: #dc2626;
+    font-size: 13px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .wl-field { margin-bottom: 18px; }
+
+  .wl-field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+  }
+
+  .wl-input-wrap { position: relative; }
+
+  .wl-field-icon {
+    position: absolute;
+    left: 14px; top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    width: 17px; height: 17px;
+    pointer-events: none;
+  }
+
+  .wl-input {
+    width: 100%;
+    height: 50px;
+    padding: 0 44px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #0f172a;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .wl-input::placeholder { color: #c0c9d8; }
+
+  .wl-input:focus {
+    border-color: #4f8ef7;
+    box-shadow: 0 0 0 4px rgba(79,142,247,0.1);
+  }
+
+  .wl-eye {
+    position: absolute;
+    right: 14px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none;
+    cursor: pointer;
+    color: #94a3b8;
+    display: flex; align-items: center;
+    transition: color 0.2s;
+    padding: 2px;
+  }
+  .wl-eye:hover { color: #4f8ef7; }
+
+  .wl-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    margin-top: 4px;
+  }
+
+  .wl-remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #475569;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .wl-remember input[type="checkbox"] {
+    width: 15px; height: 15px;
+    accent-color: #4f8ef7;
+    cursor: pointer;
+  }
+
+  .wl-admin-hint {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 400;
+  }
+
+  .wl-btn-primary {
+    width: 100%;
+    height: 52px;
+    background: linear-gradient(135deg, #4f5ef7 0%, #3b4de8 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+    letter-spacing: 0.1px;
+    box-shadow: 0 4px 20px rgba(79,94,247,0.35);
+    margin-bottom: 18px;
+  }
+
+  .wl-btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 28px rgba(79,94,247,0.45);
+  }
+
+  .wl-btn-primary:active:not(:disabled) { transform: translateY(0); }
+  .wl-btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .wl-or {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #94a3b8;
+  }
+
+  .wl-or::before, .wl-or::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e8ecf0;
+  }
+
+  .wl-btn-secondary {
+    width: 100%;
+    height: 48px;
+    background: #fff;
+    color: #475569;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    margin-bottom: 24px;
+  }
+
+  .wl-btn-secondary:hover { border-color: #4f8ef7; background: #f8faff; color: #4f8ef7; }
+
+  .wl-security {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #b0bac8;
+  }
+
+  .wl-spin {
+    width: 18px; height: 18px;
+    border: 2.5px solid rgba(255,255,255,0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: wl-spin 0.7s linear infinite;
+  }
+  @keyframes wl-spin { to { transform: rotate(360deg); } }
+
+  .wl-mobile-brand {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .wl-left { display: none; }
+    .wl-right { padding: 32px 20px; background: #eef0f5; align-items: flex-start; padding-top: 48px; }
+    .wl-card { padding: 32px 24px 28px; }
+    .wl-mobile-brand { display: flex; }
+  }
+</style><div class="wl-root"><div class="wl-left"><div class="wl-left-bg"></div><div class="wl-left-overlay"></div><div class="wl-left-dots"></div><div class="wl-left-inner"><div class="wl-brand"><div class="wl-brand-icon"><img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68e9e7d6f2c135f2968907d8/b84b417d1_6296293782902737811.jpg" alt="WorkDen"></div><span class="wl-brand-name">Work<span>Den</span></span></div><div class="wl-accent-line"></div><h1 class="wl-hero-title">Earn Smart<br>WorkDen</h1><p class="wl-hero-desc">Access your member dashboard to complete tasks, track earnings and manage your account.</p><div class="wl-features"><div class="wl-feat"><div class="wl-feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#4f8ef7" stroke-width="2" stroke-linejoin="round"></path><path d="M9 12l2 2 4-4" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div class="wl-feat-text"><span class="wl-feat-title">Secure Access</span><span class="wl-feat-desc">Your data is protected with enterprise-grade security</span></div></div><div class="wl-feat"><div class="wl-feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="#4f8ef7" stroke-width="2" stroke-linejoin="round"></polygon></svg></div><div class="wl-feat-text"><span class="wl-feat-title">Task Earnings</span><span class="wl-feat-desc">Complete tasks and earn real rewards instantly</span></div></div><div class="wl-feat"><div class="wl-feat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round"></line><line x1="12" y1="20" x2="12" y2="4" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round"></line><line x1="6" y1="20" x2="6" y2="14" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round"></line></svg></div><div class="wl-feat-text"><span class="wl-feat-title">Real-time Analytics</span><span class="wl-feat-desc">Track performance and monitor your earnings live</span></div></div></div></div></div><div class="wl-right"><div class="wl-card"><div class="wl-mobile-brand"><img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68e9e7d6f2c135f2968907d8/b84b417d1_6296293782902737811.jpg" alt="WorkDen" style="height: 44px; border-radius: 10px; object-fit: contain;"><span style="font-weight: 800; font-size: 20px; color: rgb(15, 23, 42);">Work<span style="color: rgb(79, 94, 247);">Den</span></span></div><div class="wl-lock-wrap"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="#4f5ef7" stroke-width="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#4f5ef7" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="16" r="1.5" fill="#4f5ef7"></circle></svg></div><h2 class="wl-card-title">Welcome Back</h2><p class="wl-card-sub">Login to your WorkDen account</p><form><div class="wl-field"><label class="wl-field-label">User ID (Mobile / Email / User ID)</label><div class="wl-input-wrap"><svg class="wl-field-icon" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"></circle></svg><input class="wl-input" placeholder="Enter your User ID" autocomplete="username" required="" value=""></div></div><div class="wl-field"><label class="wl-field-label">Password</label><div class="wl-input-wrap"><svg class="wl-field-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg><input class="wl-input" type="password" placeholder="Enter your password" autocomplete="current-password" required="" value="" style="padding-right: 48px;"><button type="button" class="wl-eye"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"></path><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"></circle></svg></button></div></div><div class="wl-row"><label class="wl-remember"><input type="checkbox">Remember me</label><span class="wl-admin-hint">Contact admin for help</span></div><button type="submit" class="wl-btn-primary" disabled=""><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path><polyline points="10 17 15 12 10 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></polyline><line x1="15" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></line></svg>Login to Dashboard</button></form><div class="wl-or">or</div><button type="button" class="wl-btn-secondary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path></svg>Need Help? Contact Support</button><div class="wl-security"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#b0bac8" stroke-width="2" stroke-linejoin="round"></path></svg>Your security is our priority</div></div></div></div><div class="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]"><div class="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]"></div></div>
