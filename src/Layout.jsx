@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
+import { queryClientInstance } from "@/lib/query-client";
 import BottomNav from "./components/BottomNav";
 import ReferralHandler from "./components/ReferralHandler";
 import SessionTracker from "./components/SessionTracker";
@@ -87,6 +88,25 @@ export default function Layout({ children, currentPageName }) {
       if (unsubscribe) unsubscribe();
     };
   }, [user?.id]);
+
+  // ── Global Cache Buster (Instant Admin Updates) ─────────────────────────
+  useEffect(() => {
+    let unsubscribe = null;
+    try {
+      unsubscribe = base44.entities.Settings.subscribeDoc('cache_buster', (event) => {
+         if (event.data && event.data.timestamp) {
+             const lastBust = localStorage.getItem('workden_last_cache_bust');
+             if (lastBust && Number(lastBust) < event.data.timestamp) {
+                 queryClientInstance.invalidateQueries(); // Force fetch new data instantly
+             }
+             localStorage.setItem('workden_last_cache_bust', event.data.timestamp);
+         }
+      });
+    } catch(e) {}
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
 
   // ── Heartbeat refs (no re-render needed) ────────────────────────────────
   const heartbeatIntervalRef = useRef(null);

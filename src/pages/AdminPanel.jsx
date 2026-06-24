@@ -31,6 +31,23 @@ export default function AdminPanel() {
   const [userSearch, setUserSearch] = useState("");
   const [idVerificationSearch, setIdVerificationSearch] = useState("");
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const originalInvalidate = queryClient.invalidateQueries.bind(queryClient);
+    queryClient.invalidateQueries = async (options) => {
+       const res = originalInvalidate(options);
+       try {
+           await base44.entities.Settings.update('cache_buster', { timestamp: Date.now() });
+       } catch(e) {
+           try { await base44.entities.Settings.create({ id: 'cache_buster', timestamp: Date.now() }); } catch(e2){}
+       }
+       return res;
+    };
+    return () => {
+        queryClient.invalidateQueries = originalInvalidate;
+    };
+  }, [queryClient]);
+
   const [walletSearchQuery, setWalletSearchQuery] = useState("");
   const [selectedProofs, setSelectedProofs] = useState([]);
   const [bulkActionDialog, setBulkActionDialog] = useState(false);
