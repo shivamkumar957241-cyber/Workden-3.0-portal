@@ -59,7 +59,7 @@ export default function Layout({ children, currentPageName }) {
   const [holidays, setHolidays]                       = useState([]);
   const [platformOff, setPlatformOff]                 = useState(false);
 
-  // ── Global Subscription Listener (Instant Unlock) ─────────────────────────
+  // ── Global Subscription Listener (Instant Unlock & Lock) ──────────────────
   useEffect(() => {
     let unsubscribe = null;
     const userSource = localStorage.getItem('workden_3_user_source');
@@ -67,10 +67,15 @@ export default function Layout({ children, currentPageName }) {
       unsubscribe = base44.entities.AppUser.subscribeDoc(user.id, (event) => {
          if (event.data) {
             setUser(prev => {
-               // If user was NOT subscribed/unlocked but now is, reload the page to refresh all components instantly
-               if (prev && (!prev.is_subscribed && !prev.free_unlock) && (event.data.is_subscribed || event.data.free_unlock)) {
-                   localStorage.setItem('workden_3_user', JSON.stringify(event.data));
-                   window.location.reload();
+               if (prev) {
+                   const wasUnlocked = prev.is_subscribed || prev.free_unlock;
+                   const isUnlocked = event.data.is_subscribed || event.data.free_unlock;
+                   
+                   // If status changed in either direction (Unlock -> Lock OR Lock -> Unlock)
+                   if (wasUnlocked !== isUnlocked) {
+                       localStorage.setItem('workden_3_user', JSON.stringify(event.data));
+                       window.location.reload();
+                   }
                }
                return event.data;
             });
