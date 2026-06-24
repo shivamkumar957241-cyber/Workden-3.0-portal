@@ -9,7 +9,7 @@ export default function DownloadFiles() {
   const { data: globalSettings = [] } = useQuery({
     queryKey: ['global-settings'],
     queryFn: () => base44.entities.GlobalSettings.list(),
-    initialData: [],
+    placeholderData: [],
   });
 
   const adminFilesLink = globalSettings.find(s => s.setting_key === 'admin_files')?.setting_value

@@ -14,18 +14,18 @@ export default function SupportHistory() {
 
   const loadUser = async () => {
     try {
-      const userSource = localStorage.getItem('workden_user_source');
-      const savedUserId = localStorage.getItem('workden_login_id');
+      const userSource = localStorage.getItem('workden_3_user_source');
+      const savedUserId = localStorage.getItem('workden_3_login_id');
       if (userSource === 'appuser' && savedUserId) {
         const appUsers = await base44.entities.AppUser.filter({ login_user_id: savedUserId });
         if (appUsers?.length > 0) { setUser(appUsers[0]); return; }
       }
-      const savedUser = localStorage.getItem('workden_user');
+      const savedUser = localStorage.getItem('workden_3_user');
       if (savedUser) { setUser(JSON.parse(savedUser)); return; }
       const currentUser = await base44.auth.me();
       setUser(currentUser);
     } catch (error) {
-      const savedUser = localStorage.getItem('workden_user');
+      const savedUser = localStorage.getItem('workden_3_user');
       if (savedUser) setUser(JSON.parse(savedUser));
     }
   };
@@ -34,7 +34,7 @@ export default function SupportHistory() {
     queryKey: ['my-help-tickets', user?.id],
     queryFn: () => base44.entities.HelpTicket.filter({ user_id: user?.id }, '-created_date', 50),
     enabled: !!user?.id,
-    initialData: [],
+    placeholderData: [],
     refetchInterval: 30000,
   });
 
@@ -42,7 +42,7 @@ export default function SupportHistory() {
     queryKey: ['my-call-requests', user?.id],
     queryFn: () => base44.entities.CallRequest.filter({ user_id: user?.id }, '-created_date', 50),
     enabled: !!user?.id,
-    initialData: [],
+    placeholderData: [],
     refetchInterval: 30000,
   });
 

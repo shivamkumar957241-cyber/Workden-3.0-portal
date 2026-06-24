@@ -40,14 +40,14 @@ export default function Leaderboard() {
     queryKey: ['all-users'],
     queryFn: () => base44.entities.User.list(),
     refetchInterval: 5000,
-    initialData: [],
+    placeholderData: [],
   });
 
   const { data: appUsers = [] } = useQuery({
     queryKey: ['all-app-users-leaderboard'],
     queryFn: () => base44.entities.AppUser.list(),
     refetchInterval: 5000,
-    initialData: [],
+    placeholderData: [],
   });
 
   // Merge both user types into one leaderboard list

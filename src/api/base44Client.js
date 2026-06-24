@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "firebase/auth";
-import { getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, where, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, onSnapshot } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
@@ -15,8 +15,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+const db = initializeFirestore(app, {
+  localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+});
+export const storage = getStorage(app);
 
 // Keep track of current user
 let currentUser = null;
@@ -102,7 +104,7 @@ const getEntityAPI = (entityName) => {
       
       // Fallback for legacy user sessions that are still in localStorage
       if (entityName === "AppUser" && results.length === 0 && criteria?.login_user_id) {
-         const saved = localStorage.getItem('workden_user');
+         const saved = localStorage.getItem('workden_3_user');
          if (saved) {
            const parsed = JSON.parse(saved);
            if (parsed.login_user_id === criteria.login_user_id) {
@@ -140,6 +142,23 @@ const getEntityAPI = (entityName) => {
       if (!id) throw new Error("Entity delete requires an ID");
       const docRef = doc(db, entityName, id);
       await deleteDoc(docRef);
+    },
+    subscribe: (callback) => {
+      return onSnapshot(colRef, (snapshot) => {
+        const events = snapshot.docChanges().map(change => ({
+          type: change.type,
+          payload: { id: change.doc.id, ...change.doc.data() }
+        }));
+        events.forEach(event => callback(event));
+      });
+    },
+    subscribeDoc: (id, callback) => {
+      const dRef = doc(db, entityName, id);
+      return onSnapshot(dRef, (snapshot) => {
+        if (snapshot.exists()) {
+          callback({ id: snapshot.id, data: snapshot.data() });
+        }
+      });
     }
   };
 };
@@ -175,7 +194,7 @@ export const base44 = {
       }
       
       // Fallback for users logged in before the Firebase migration
-      const saved = localStorage.getItem('workden_user');
+      const saved = localStorage.getItem('workden_3_user');
       if (saved) {
          const parsed = JSON.parse(saved);
          if (!parsed.id) parsed.id = parsed.login_user_id || "temp-id";
@@ -219,10 +238,22 @@ export const base44 = {
   integrations: {
     Core: {
       UploadFile: async ({ file }) => {
-        const storageRef = ref(storage, `uploads/${Date.now()}_${file.name}`);
-        await uploadBytes(storageRef, file);
-        const url = await getDownloadURL(storageRef);
-        return { file_url: url };
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'workden_unsigned');
+        
+        const res = await fetch('https://api.cloudinary.com/v1_1/dynrihmjd/auto/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!res.ok) {
+          const error = await res.json();
+          throw new Error(error.error?.message || 'Upload failed');
+        }
+        
+        const data = await res.json();
+        return { file_url: data.secure_url };
       }
     }
   },

@@ -57,7 +57,7 @@ export default function ContactUs() {
     }
     setSubmitting(true);
     try {
-      const userId = localStorage.getItem('workden_login_id') || 'guest';
+      const userId = localStorage.getItem('workden_3_login_id') || 'guest';
       await base44.entities.HelpTicket.create({
         user_id: userId,
         user_name: form.name,

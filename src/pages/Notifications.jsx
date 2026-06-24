@@ -24,8 +24,8 @@ export default function Notifications() {
   const loadUser = async () => {
     try {
       // Try AppUser first (admin-created users)
-      const savedUserStr = localStorage.getItem('workden_user');
-      const savedUserSource = localStorage.getItem('workden_user_source');
+      const savedUserStr = localStorage.getItem('workden_3_user');
+      const savedUserSource = localStorage.getItem('workden_3_user_source');
       if (savedUserSource === 'appuser' && savedUserStr) {
         const localUser = JSON.parse(savedUserStr);
         setUser(localUser);
@@ -36,7 +36,7 @@ export default function Notifications() {
     } catch (error) {
       // Fallback to localStorage
       try {
-        const savedUserStr = localStorage.getItem('workden_user');
+        const savedUserStr = localStorage.getItem('workden_3_user');
         if (savedUserStr) setUser(JSON.parse(savedUserStr));
       } catch (e) {}
     }
@@ -46,7 +46,7 @@ export default function Notifications() {
   const { data: allNotifications = [] } = useQuery({
     queryKey: ['all-notifications'],
     queryFn: () => base44.entities.Notification.list('-created_date'),
-    initialData: [],
+    placeholderData: [],
     refetchInterval: 15000,
   });
 

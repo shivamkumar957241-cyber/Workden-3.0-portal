@@ -11,7 +11,7 @@ export function TaskLockProvider({ children }) {
   const performLock = useCallback(() => {
     const activeTaskName = sessionStorage.getItem('workden_active_task_name');
     if (!activeTaskName) return;
-    const userId = localStorage.getItem('workden_login_id') || 'guest';
+    const userId = localStorage.getItem('workden_3_login_id') || 'guest';
     const key = `workden_task_lock_${userId}_${activeTaskName.replace(/\s+/g, '_')}`;
     const lockUntil = new Date();
     lockUntil.setDate(lockUntil.getDate() + 1);

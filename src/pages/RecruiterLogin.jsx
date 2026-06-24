@@ -53,7 +53,7 @@ export default function RecruiterLogin() {
       localStorage.setItem('recruiter_session', JSON.stringify(sessionData));
       
       // Redirect to dashboard
-      window.location.href = createPageUrl("RecruiterDashboard");
+      window.location.href = "#" + createPageUrl("RecruiterDashboard");
     } catch (error) {
       console.error("Login error:", error);
       setError("Login failed. Please try again.");

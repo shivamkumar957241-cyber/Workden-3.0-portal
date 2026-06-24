@@ -501,7 +501,7 @@ export default function CreateUser() {
   const { data: appUsers = [] } = useQuery({
     queryKey: ['app-users'],
     queryFn: () => base44.entities.AppUser.list('-created_date', 100),
-    initialData: []
+    placeholderData: []
   });
 
   const createMutation = useMutation({

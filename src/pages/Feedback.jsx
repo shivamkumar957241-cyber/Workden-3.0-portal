@@ -18,7 +18,7 @@ export default function Feedback() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('workden_user');
+    const savedUser = localStorage.getItem('workden_3_user');
     if (savedUser) {
       try { setUser(JSON.parse(savedUser)); } catch(e) {}
     }

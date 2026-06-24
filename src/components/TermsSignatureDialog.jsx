@@ -41,7 +41,7 @@ export default function TermsSignatureDialog({ user, onAccept }) {
         if (existing && existing.length > 0) {
           // Already submitted — mark locally and update user record
           localStorage.setItem('workden_terms_accepted', 'true');
-          const userSource = localStorage.getItem('workden_user_source');
+          const userSource = localStorage.getItem('workden_3_user_source');
           try {
             if (userSource === 'appuser') {
               await base44.entities.AppUser.update(userId, { terms_accepted: true });
@@ -49,12 +49,12 @@ export default function TermsSignatureDialog({ user, onAccept }) {
               await base44.entities.User.update(userId, { terms_accepted: true });
             }
           } catch (e) {}
-          const cached = localStorage.getItem('workden_user');
+          const cached = localStorage.getItem('workden_3_user');
           if (cached) {
             try {
               const c = JSON.parse(cached);
               c.terms_accepted = true;
-              localStorage.setItem('workden_user', JSON.stringify(c));
+              localStorage.setItem('workden_3_user', JSON.stringify(c));
             } catch (e) {}
           }
           return; // Don't show dialog
@@ -214,7 +214,7 @@ export default function TermsSignatureDialog({ user, onAccept }) {
       // Use the base64 data URL directly instead of uploading (avoids upload failures)
       const file_url = signatureData;
 
-      const cachedUserStr = localStorage.getItem('workden_user');
+      const cachedUserStr = localStorage.getItem('workden_3_user');
       let userId = user?.id || 'anonymous';
       let userName = user?.full_name || user?.email || 'User';
       let userEmail = user?.email || '';
@@ -245,7 +245,7 @@ export default function TermsSignatureDialog({ user, onAccept }) {
 
       // Update user record
       try {
-        const userSource = localStorage.getItem('workden_user_source');
+        const userSource = localStorage.getItem('workden_3_user_source');
         if (userSource === 'appuser') {
           await base44.entities.AppUser.update(userId, {
             terms_accepted: true,
@@ -267,7 +267,7 @@ export default function TermsSignatureDialog({ user, onAccept }) {
         try {
           const cachedUser = JSON.parse(cachedUserStr);
           cachedUser.terms_accepted = true;
-          localStorage.setItem('workden_user', JSON.stringify(cachedUser));
+          localStorage.setItem('workden_3_user', JSON.stringify(cachedUser));
         } catch (e) {}
       }
 

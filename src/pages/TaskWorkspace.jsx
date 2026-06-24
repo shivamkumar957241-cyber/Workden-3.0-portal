@@ -210,14 +210,14 @@ export default function TaskWorkspace() {
   const loadData = async () => {
     try {
       let currentUser = null;
-      const userSource = localStorage.getItem('workden_user_source');
-      const savedUserId = localStorage.getItem('workden_login_id');
+      const userSource = localStorage.getItem('workden_3_user_source');
+      const savedUserId = localStorage.getItem('workden_3_login_id');
       if (userSource === 'appuser' && savedUserId) {
         const appUsers = await base44.entities.AppUser.filter({ login_user_id: savedUserId });
         if (appUsers?.length > 0) currentUser = appUsers[0];
       }
       if (!currentUser) {
-        const savedUserStr = localStorage.getItem('workden_user');
+        const savedUserStr = localStorage.getItem('workden_3_user');
         if (savedUserStr) currentUser = JSON.parse(savedUserStr);
       }
       if (!currentUser) currentUser = await base44.auth.me();
@@ -229,7 +229,7 @@ export default function TaskWorkspace() {
         
         if (!foundTask) {
           // Task not found - redirect immediately
-          window.location.href = createPageUrl("Tasks");
+          window.location.href = "#" + createPageUrl("Tasks");
           return;
         }
         
@@ -243,7 +243,7 @@ export default function TaskWorkspace() {
           const offMessage = settings.find(s => s.setting_key === 'platform_off_message')?.setting_value || 
                              "Platform is currently closed. Please check back later.";
           alert(`🚫 ${offMessage}`);
-          window.location.href = createPageUrl("Tasks");
+          window.location.href = "#" + createPageUrl("Tasks");
           return;
         }
 
@@ -276,7 +276,7 @@ export default function TaskWorkspace() {
             const unlockTime = new Date(lockedTask.locked_until);
             const lockReason = lockedTask.lock_reason === 'incomplete' ? 'Task left incomplete' : 'Task time expired';
             alert(`🔒 Task Locked\n\nReason: ${lockReason}\nUnlocks: ${unlockTime.toLocaleString('en-IN', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}\n\nYou can retry this task after it unlocks automatically.`);
-            window.location.href = createPageUrl("Tasks");
+            window.location.href = "#" + createPageUrl("Tasks");
             return;
           }
         }
@@ -374,7 +374,7 @@ export default function TaskWorkspace() {
           localStorage.removeItem(`task_${taskId}_state`);
           
           alert("⚠️ You switched tabs. Task has been locked until tomorrow 9:00 AM.");
-          window.location.href = createPageUrl("Tasks");
+          window.location.href = "#" + createPageUrl("Tasks");
         }
       };
       
@@ -1423,7 +1423,7 @@ Digital Signature: WD-${userId}-${Date.now()}
     }
     localStorage.removeItem(`task_${taskId}_state`);
     setShowLeaveWarning(false);
-    window.location.href = createPageUrl("Tasks");
+    window.location.href = "#" + createPageUrl("Tasks");
   };
 
   return (
@@ -1446,7 +1446,7 @@ Digital Signature: WD-${userId}-${Date.now()}
               if (taskStarted && !isExpired) {
                 setShowLeaveWarning(true);
               } else {
-                window.location.href = createPageUrl("Tasks");
+                window.location.href = "#" + createPageUrl("Tasks");
               }
             }}
           >

@@ -54,13 +54,13 @@ export default function SavedWork() {
   const { data: savedWorks = [] } = useQuery({
     queryKey: ['saved-works'],
     queryFn: () => base44.entities.SavedWork.list('-saved_date'),
-    initialData: [],
+    placeholderData: [],
   });
 
   const { data: users = [] } = useQuery({
     queryKey: ['all-users'],
     queryFn: () => base44.entities.User.list(),
-    initialData: [],
+    placeholderData: [],
     enabled: user?.role === 'admin',
   });
 

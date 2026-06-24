@@ -17,7 +17,7 @@ export default function ReferralPartner() {
   const { data: globalSettings = [] } = useQuery({
     queryKey: ['global-settings'],
     queryFn: () => base44.entities.GlobalSettings.list(),
-    initialData: []
+    placeholderData: []
   });
   const [formData, setFormData] = useState({
     full_name: "",
@@ -36,8 +36,8 @@ export default function ReferralPartner() {
   const loadUser = async () => {
     try {
       // Support AppUsers
-      const userSource = localStorage.getItem('workden_user_source');
-      const savedUserId = localStorage.getItem('workden_login_id');
+      const userSource = localStorage.getItem('workden_3_user_source');
+      const savedUserId = localStorage.getItem('workden_3_login_id');
       let currentUser = null;
 
       if (userSource === 'appuser' && savedUserId) {
@@ -45,7 +45,7 @@ export default function ReferralPartner() {
         if (appUsers?.length > 0) currentUser = appUsers[0];
       }
       if (!currentUser) {
-        const savedUser = localStorage.getItem('workden_user');
+        const savedUser = localStorage.getItem('workden_3_user');
         if (savedUser) currentUser = JSON.parse(savedUser);
       }
       if (!currentUser) {
@@ -61,7 +61,7 @@ export default function ReferralPartner() {
         city: ""
       });
     } catch (error) {
-      const savedUser = localStorage.getItem('workden_user');
+      const savedUser = localStorage.getItem('workden_3_user');
       if (savedUser) {
         const u = JSON.parse(savedUser);
         setUser(u);
@@ -74,7 +74,7 @@ export default function ReferralPartner() {
     queryKey: ['my-referral-partner-app', user?.id],
     queryFn: () => base44.entities.ReferralPartner.filter({ user_id: user?.id }),
     enabled: !!user?.id,
-    initialData: []
+    placeholderData: []
   });
 
   const applyMutation = useMutation({

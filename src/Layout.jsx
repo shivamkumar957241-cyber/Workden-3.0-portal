@@ -59,6 +59,30 @@ export default function Layout({ children, currentPageName }) {
   const [holidays, setHolidays]                       = useState([]);
   const [platformOff, setPlatformOff]                 = useState(false);
 
+  // ── Global Subscription Listener (Instant Unlock) ─────────────────────────
+  useEffect(() => {
+    let unsubscribe = null;
+    const userSource = localStorage.getItem('workden_3_user_source');
+    if (user?.id && userSource === 'appuser') {
+      unsubscribe = base44.entities.AppUser.subscribeDoc(user.id, (event) => {
+         if (event.data) {
+            setUser(prev => {
+               // If user was NOT subscribed/unlocked but now is, reload the page to refresh all components instantly
+               if (prev && (!prev.is_subscribed && !prev.free_unlock) && (event.data.is_subscribed || event.data.free_unlock)) {
+                   localStorage.setItem('workden_3_user', JSON.stringify(event.data));
+                   window.location.reload();
+               }
+               return event.data;
+            });
+            localStorage.setItem('workden_3_user', JSON.stringify(event.data));
+         }
+      });
+    }
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [user?.id]);
+
   // ── Heartbeat refs (no re-render needed) ────────────────────────────────
   const heartbeatIntervalRef = useRef(null);
   const lastPingSentRef      = useRef(0);
@@ -110,7 +134,7 @@ export default function Layout({ children, currentPageName }) {
 
   // ── Heartbeat: setup effect — runs when user loads ───────────────────────
   useEffect(() => {
-    const userSource = localStorage.getItem('workden_user_source');
+    const userSource = localStorage.getItem('workden_3_user_source');
 
     // Sirf appuser ke liye heartbeat — admin ya guest ke liye nahi
     if (!user?.id || userSource !== 'appuser' || user?.role === 'admin') return;
@@ -154,7 +178,7 @@ export default function Layout({ children, currentPageName }) {
   // ────────────────────────────────────────────────────────────────────────
 
   useEffect(() => {
-    const cachedUser  = localStorage.getItem('workden_user');
+    const cachedUser  = localStorage.getItem('workden_3_user');
     const cachedTasks = localStorage.getItem('workden_tasks');
 
     if (cachedUser)  { try { setUser(JSON.parse(cachedUser));   } catch (e) {} }
@@ -167,9 +191,9 @@ export default function Layout({ children, currentPageName }) {
 
     // SESSION POLL — checks every 30s if this session is still valid
     const sessionPollInterval = setInterval(async () => {
-      const userSource      = localStorage.getItem('workden_user_source');
-      const storedSessionId = localStorage.getItem('workden_session_id');
-      const savedUserId     = localStorage.getItem('workden_login_id');
+      const userSource      = localStorage.getItem('workden_3_user_source');
+      const storedSessionId = localStorage.getItem('workden_3_session_id');
+      const savedUserId     = localStorage.getItem('workden_3_login_id');
 
       if (userSource !== 'appuser' || !storedSessionId || !savedUserId) return;
 
@@ -182,7 +206,7 @@ export default function Layout({ children, currentPageName }) {
         if (dbUser.status === 'inactive') {
           alert("⚠️ Your account has been deactivated. Please contact admin.");
           localStorage.clear(); sessionStorage.clear();
-          window.location.replace(createPageUrl("UserLogin"));
+          window.location.replace("#" + createPageUrl("UserLogin"));
           return;
         }
 
@@ -194,13 +218,13 @@ export default function Layout({ children, currentPageName }) {
           if (otherDeviceIsActive) {
             alert("⚠️ You have been logged out because another device logged in with your account.");
             localStorage.clear(); sessionStorage.clear();
-            window.location.replace(createPageUrl("UserLogin"));
+            window.location.replace("#" + createPageUrl("UserLogin"));
             return;
           }
         }
 
         if (dbUser.role !== 'admin' && (!dbUser.is_subscribed && !dbUser.free_unlock)) {
-          localStorage.setItem('workden_user', JSON.stringify(dbUser));
+          localStorage.setItem('workden_3_user', JSON.stringify(dbUser));
           setUser(dbUser);
         }
       } catch (e) {
@@ -416,10 +440,10 @@ export default function Layout({ children, currentPageName }) {
   };
 
   const loadUser = async () => {
-    const savedUserId     = localStorage.getItem('workden_login_id');
-    const savedPassword   = localStorage.getItem('workden_login_password');
-    const savedUserSource = localStorage.getItem('workden_user_source');
-    const savedUserStr    = localStorage.getItem('workden_user');
+    const savedUserId     = localStorage.getItem('workden_3_login_id');
+    const savedPassword   = localStorage.getItem('workden_3_login_password');
+    const savedUserSource = localStorage.getItem('workden_3_user_source');
+    const savedUserStr    = localStorage.getItem('workden_3_user');
 
     if (savedUserId === 'SHIVAM' && savedPassword === '995567') {
       if (savedUserStr) { try { setUser(JSON.parse(savedUserStr)); return; } catch (e) {} }
@@ -444,11 +468,11 @@ export default function Layout({ children, currentPageName }) {
                 if (dbUser.status === 'inactive') {
                   alert("Your account has been deactivated. Please contact admin.");
                   localStorage.clear();
-                  window.location.replace(createPageUrl("UserLogin"));
+                  window.location.replace("#" + createPageUrl("UserLogin"));
                   return;
                 }
 
-                const storedSessionId = localStorage.getItem('workden_session_id');
+                const storedSessionId = localStorage.getItem('workden_3_session_id');
                 if (
                   dbUser.role !== 'admin' &&
                   dbUser.session_id && storedSessionId &&
@@ -459,7 +483,7 @@ export default function Layout({ children, currentPageName }) {
                   if (lastActive && lastActive > fiveMinsAgo) {
                     alert("⚠️ Your session has expired because another device is actively logged in. Please logout from that device first.");
                     localStorage.clear(); sessionStorage.clear();
-                    window.location.replace(createPageUrl("UserLogin"));
+                    window.location.replace("#" + createPageUrl("UserLogin"));
                     return;
                   }
                 }
@@ -467,7 +491,7 @@ export default function Layout({ children, currentPageName }) {
                 // Note: last_active / last_heartbeat ab heartbeat handle karega — yahan update mat karo
                 // Warna heartbeat ka debounce trigger ho jaata hai on mount
                 setUser(dbUser);
-                localStorage.setItem('workden_user', JSON.stringify(dbUser));
+                localStorage.setItem('workden_3_user', JSON.stringify(dbUser));
                 return;
               }
             } catch (e) {
@@ -476,7 +500,7 @@ export default function Layout({ children, currentPageName }) {
           }
         } catch (e) {}
       }
-      if (currentPageName !== 'UserLogin') window.location.replace(createPageUrl("UserLogin"));
+      if (currentPageName !== 'UserLogin') window.location.replace("#" + createPageUrl("UserLogin"));
       return;
     }
 
@@ -485,12 +509,12 @@ export default function Layout({ children, currentPageName }) {
       if (currentUser.status === 'inactive') {
         alert("Your account has been deactivated. Please contact support.");
         localStorage.clear();
-        window.location.replace(createPageUrl("UserLogin"));
+        window.location.replace("#" + createPageUrl("UserLogin"));
         return;
       }
       if (currentUser.role === 'admin') {
         setUser(currentUser);
-        localStorage.setItem('workden_user', JSON.stringify(currentUser));
+        localStorage.setItem('workden_3_user', JSON.stringify(currentUser));
         return;
       }
       if (savedUserId && savedPassword) {
@@ -500,11 +524,11 @@ export default function Layout({ children, currentPageName }) {
         }
       }
       if (!currentUser.login_user_id || !currentUser.login_password) {
-        if (currentPageName !== 'UserLogin') window.location.replace(createPageUrl("UserLogin"));
+        if (currentPageName !== 'UserLogin') window.location.replace("#" + createPageUrl("UserLogin"));
         return;
       }
       setUser(currentUser);
-      localStorage.setItem('workden_user', JSON.stringify(currentUser));
+      localStorage.setItem('workden_3_user', JSON.stringify(currentUser));
     } catch (error) {
       if (savedUserId && savedPassword && savedUserStr) {
         try {
@@ -514,7 +538,7 @@ export default function Layout({ children, currentPageName }) {
           }
         } catch (e) {}
       }
-      if (currentPageName !== 'UserLogin') window.location.replace(createPageUrl("UserLogin"));
+      if (currentPageName !== 'UserLogin') window.location.replace("#" + createPageUrl("UserLogin"));
     }
   };
 
@@ -591,8 +615,8 @@ export default function Layout({ children, currentPageName }) {
     stopHeartbeat();
 
     try {
-      const userSource  = localStorage.getItem('workden_user_source');
-      const savedUser   = localStorage.getItem('workden_user');
+      const userSource  = localStorage.getItem('workden_3_user_source');
+      const savedUser   = localStorage.getItem('workden_3_user');
 
       if (userSource === 'appuser' && savedUser) {
         try {
@@ -620,7 +644,7 @@ export default function Layout({ children, currentPageName }) {
         } catch (e) {}
       }
 
-      const recruiterID = localStorage.getItem('workden_recruiter_id');
+      const recruiterID = localStorage.getItem('workden_3_recruiter_id');
       if (recruiterID) {
         await base44.entities.Recruiter.update(recruiterID, {
           is_logged_in: false, session_id: null
@@ -633,11 +657,11 @@ export default function Layout({ children, currentPageName }) {
         document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
       });
       await base44.auth.logout().catch(() => {});
-      window.location.replace(createPageUrl("UserLogin"));
+      window.location.replace("#" + createPageUrl("UserLogin"));
     } catch (error) {
       console.error("Error during logout:", error);
       localStorage.clear(); sessionStorage.clear();
-      window.location.replace(createPageUrl("UserLogin"));
+      window.location.replace("#" + createPageUrl("UserLogin"));
     }
   };
 
@@ -756,8 +780,8 @@ export default function Layout({ children, currentPageName }) {
   const publicPages = ['UserLogin','UserSignup','RecruiterPortal','RecruiterLogin','RecruiterDashboard','CreateUser'];
   if (publicPages.includes(currentPageName)) return <>{children}</>;
 
-  const hasSession = localStorage.getItem('workden_login_id') && localStorage.getItem('workden_user');
-  if (!hasSession) { window.location.replace(createPageUrl("UserLogin")); return null; }
+  const hasSession = localStorage.getItem('workden_3_login_id') && localStorage.getItem('workden_3_user');
+  if (!hasSession) { window.location.replace("#" + createPageUrl("UserLogin")); return null; }
 
   return (
     <div className="flex min-h-screen bg-gray-50">

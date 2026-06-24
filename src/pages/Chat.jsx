@@ -55,7 +55,7 @@ export default function Chat() {
     queryFn: () => base44.entities.User.list(),
     enabled: user?.role === 'admin',
     refetchInterval: 10000,
-    initialData: [],
+    placeholderData: [],
   });
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function Chat() {
     queryKey: ['all-messages'],
     queryFn: () => base44.entities.ChatMessage.list('-created_date'),
     refetchInterval: 2000,
-    initialData: [],
+    placeholderData: [],
   });
 
   const { data: unreadCount = 0 } = useQuery({
@@ -118,7 +118,7 @@ export default function Chat() {
     },
     refetchInterval: 2000,
     enabled: !!user,
-    initialData: [],
+    placeholderData: [],
   });
 
   const sendMessageMutation = useMutation({

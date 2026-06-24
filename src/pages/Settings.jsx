@@ -144,7 +144,7 @@ export default function Settings() {
       localStorage.clear();
       sessionStorage.clear();
       await base44.auth.logout();
-      window.location.href = '/';
+      window.location.href = "#/";
     } catch (error) {
       console.error("Error deleting account:", error);
       alert("❌ Failed to delete account. Please contact support.");

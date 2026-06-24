@@ -47,7 +47,7 @@ export default function Referral() {
     queryKey: ['my-referrals', user?.referral_code],
     queryFn: () => base44.entities.Referral.filter({ referrer_code: user?.referral_code }),
     enabled: !!user?.referral_code && user?.referral_access_enabled,
-    initialData: [],
+    placeholderData: [],
   });
 
   const handleCopyCode = () => {

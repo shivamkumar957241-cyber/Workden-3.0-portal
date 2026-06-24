@@ -20,8 +20,8 @@ export default function UserDetailPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const { data: users = [] } = useQuery({ queryKey: ['all-users'], queryFn: () => base44.entities.User.list(), initialData: [] });
-  const { data: proofs = [] } = useQuery({ queryKey: ['all-proofs'], queryFn: () => base44.entities.Proof.list('-created_date'), initialData: [] });
+  const { data: users = [] } = useQuery({ queryKey: ['all-users'], queryFn: () => base44.entities.User.list(), placeholderData: [] });
+  const { data: proofs = [] } = useQuery({ queryKey: ['all-proofs'], queryFn: () => base44.entities.Proof.list('-created_date'), placeholderData: [] });
 
   const user = users.find(u => u.id === userId);
   const userProofs = proofs.filter(p => p.user_id === userId);

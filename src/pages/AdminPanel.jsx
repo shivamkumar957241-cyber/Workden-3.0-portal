@@ -75,26 +75,26 @@ export default function AdminPanel() {
   const [holidayDialog, setHolidayDialog] = useState(false); const [holidayForm, setHolidayForm] = useState({ holiday_name: "", holiday_date: "", message: "", emoji: "🎉" }); const [editingHoliday, setEditingHoliday] = useState(null);
   const [validationDetailDialog, setValidationDetailDialog] = useState(false); const [selectedValidationReport, setSelectedValidationReport] = useState(null); const [userHistoryDialog, setUserHistoryDialog] = useState(false);
 
-  const { data: users = [] } = useQuery({ queryKey: ['all-users'], queryFn: () => base44.entities.User.list(), initialData: [], refetchInterval: 10000 });
-  const { data: tasks = [] } = useQuery({ queryKey: ['tasks'], queryFn: () => base44.entities.Task.list(), initialData: [] });
-  const { data: proofs = [] } = useQuery({ queryKey: ['all-proofs'], queryFn: () => base44.entities.Proof.list('-created_date'), initialData: [], refetchInterval: 5000 });
-  const { data: withdrawals = [] } = useQuery({ queryKey: ['withdrawals'], queryFn: () => base44.entities.WithdrawalRequest.list('-requested_date'), initialData: [], refetchInterval: 10000 });
-  const { data: notifications = [] } = useQuery({ queryKey: ['all-notifications'], queryFn: () => base44.entities.Notification.list('-created_date'), initialData: [] });
-  const { data: walletTransactions = [] } = useQuery({ queryKey: ['wallet-transactions'], queryFn: () => base44.entities.WalletTransaction.list('-timestamp'), initialData: [], refetchInterval: 15000 });
-  const { data: globalSettings = [] } = useQuery({ queryKey: ['global-settings'], queryFn: () => base44.entities.GlobalSettings.list(), initialData: [] });
-  const { data: subscriptionPayments = [] } = useQuery({ queryKey: ['subscription-payments'], queryFn: () => base44.entities.SubscriptionPayment.list('-created_date'), initialData: [], refetchInterval: 10000 });
-  const { data: trainingVideos = [] } = useQuery({ queryKey: ['training-videos'], queryFn: () => base44.entities.TrainingVideo.list(), initialData: [] });
-  const { data: recruiters = [] } = useQuery({ queryKey: ['recruiters'], queryFn: () => base44.entities.Recruiter.list(), initialData: [], refetchInterval: 10000 });
-  const { data: appUsers = [] } = useQuery({ queryKey: ['all-app-users'], queryFn: () => base44.entities.AppUser.list('-created_date', 200), initialData: [], refetchInterval: 10000 });
-  const { data: taskActivityLogs = [] } = useQuery({ queryKey: ['task-activity'], queryFn: () => base44.entities.TaskActivityLog.list('-start_time'), initialData: [], refetchInterval: 8000 });
-  const { data: loginAttempts = [] } = useQuery({ queryKey: ['login-attempts'], queryFn: () => base44.entities.LoginAttempt.list('-login_time'), initialData: [], refetchInterval: 5000 });
-  const { data: savedReplies = [] } = useQuery({ queryKey: ['saved-replies'], queryFn: () => base44.entities.SavedRejectionReply.list('order'), initialData: [] });
-  const { data: helpTickets = [] } = useQuery({ queryKey: ['help-tickets'], queryFn: () => base44.entities.HelpTicket.list('-created_date'), initialData: [], refetchInterval: 10000 });
-  const { data: userFeedbacks = [] } = useQuery({ queryKey: ['user-feedbacks'], queryFn: () => base44.entities.UserFeedback.list('-created_date'), initialData: [], refetchInterval: 15000 });
-  const { data: appreciationBonuses = [] } = useQuery({ queryKey: ['appreciation-bonuses'], queryFn: () => base44.entities.AppreciationBonus.list('-created_date'), initialData: [], refetchInterval: 10000 });
-  const { data: holidays = [] } = useQuery({ queryKey: ['holidays'], queryFn: () => base44.entities.Holiday.list('holiday_date'), initialData: [] });
-  const { data: referralPartners = [] } = useQuery({ queryKey: ['referral-partners'], queryFn: () => base44.entities.ReferralPartner.list('-created_date'), initialData: [], refetchInterval: 10000 });
-  const { data: callRequests = [] } = useQuery({ queryKey: ['call-requests'], queryFn: () => base44.entities.CallRequest.list('-created_date'), initialData: [], refetchInterval: 10000 });
+  const { data: users = [] } = useQuery({ queryKey: ['all-users'], queryFn: () => base44.entities.User.list(), placeholderData: [], refetchInterval: 10000 });
+  const { data: tasks = [] } = useQuery({ queryKey: ['tasks'], queryFn: () => base44.entities.Task.list(), placeholderData: [] });
+  const { data: proofs = [] } = useQuery({ queryKey: ['all-proofs'], queryFn: () => base44.entities.Proof.list('-created_date'), placeholderData: [], refetchInterval: 5000 });
+  const { data: withdrawals = [] } = useQuery({ queryKey: ['withdrawals'], queryFn: () => base44.entities.WithdrawalRequest.list('-requested_date'), placeholderData: [], refetchInterval: 10000 });
+  const { data: notifications = [] } = useQuery({ queryKey: ['all-notifications'], queryFn: () => base44.entities.Notification.list('-created_date'), placeholderData: [] });
+  const { data: walletTransactions = [] } = useQuery({ queryKey: ['wallet-transactions'], queryFn: () => base44.entities.WalletTransaction.list('-timestamp'), placeholderData: [], refetchInterval: 15000 });
+  const { data: globalSettings = [] } = useQuery({ queryKey: ['global-settings'], queryFn: () => base44.entities.GlobalSettings.list(), placeholderData: [] });
+  const { data: subscriptionPayments = [] } = useQuery({ queryKey: ['subscription-payments'], queryFn: () => base44.entities.SubscriptionPayment.list('-created_date'), placeholderData: [], refetchInterval: 10000 });
+  const { data: trainingVideos = [] } = useQuery({ queryKey: ['training-videos'], queryFn: () => base44.entities.TrainingVideo.list(), placeholderData: [] });
+  const { data: recruiters = [] } = useQuery({ queryKey: ['recruiters'], queryFn: () => base44.entities.Recruiter.list(), placeholderData: [], refetchInterval: 10000 });
+  const { data: appUsers = [] } = useQuery({ queryKey: ['all-app-users'], queryFn: () => base44.entities.AppUser.list('-created_date', 200), placeholderData: [], refetchInterval: 10000 });
+  const { data: taskActivityLogs = [] } = useQuery({ queryKey: ['task-activity'], queryFn: () => base44.entities.TaskActivityLog.list('-start_time'), placeholderData: [], refetchInterval: 8000 });
+  const { data: loginAttempts = [] } = useQuery({ queryKey: ['login-attempts'], queryFn: () => base44.entities.LoginAttempt.list('-login_time'), placeholderData: [], refetchInterval: 5000 });
+  const { data: savedReplies = [] } = useQuery({ queryKey: ['saved-replies'], queryFn: () => base44.entities.SavedRejectionReply.list('order'), placeholderData: [] });
+  const { data: helpTickets = [] } = useQuery({ queryKey: ['help-tickets'], queryFn: () => base44.entities.HelpTicket.list('-created_date'), placeholderData: [], refetchInterval: 10000 });
+  const { data: userFeedbacks = [] } = useQuery({ queryKey: ['user-feedbacks'], queryFn: () => base44.entities.UserFeedback.list('-created_date'), placeholderData: [], refetchInterval: 15000 });
+  const { data: appreciationBonuses = [] } = useQuery({ queryKey: ['appreciation-bonuses'], queryFn: () => base44.entities.AppreciationBonus.list('-created_date'), placeholderData: [], refetchInterval: 10000 });
+  const { data: holidays = [] } = useQuery({ queryKey: ['holidays'], queryFn: () => base44.entities.Holiday.list('holiday_date'), placeholderData: [] });
+  const { data: referralPartners = [] } = useQuery({ queryKey: ['referral-partners'], queryFn: () => base44.entities.ReferralPartner.list('-created_date'), placeholderData: [], refetchInterval: 10000 });
+  const { data: callRequests = [] } = useQuery({ queryKey: ['call-requests'], queryFn: () => base44.entities.CallRequest.list('-created_date'), placeholderData: [], refetchInterval: 10000 });
   useEffect(() => {
     const existingAdminFileSetting = globalSettings.find(s => s.setting_key === 'admin_files');
     if (existingAdminFileSetting) setAdminFileLink(existingAdminFileSetting.setting_value);
@@ -504,7 +504,7 @@ export default function AdminPanel() {
     if (!walletAdjustForm.user_id || !walletAdjustForm.amount || !walletAdjustForm.reason.trim()) { alert("⚠️ Fill all fields (user, amount, reason)"); return; }
     let adminUser = { id: 'admin', full_name: 'Admin', email: 'admin' };
     try {
-      const savedUser = localStorage.getItem('workden_user');
+      const savedUser = localStorage.getItem('workden_3_user');
       if (savedUser) { const u = JSON.parse(savedUser); adminUser = { id: u.id || 'admin', full_name: u.full_name || 'Admin', email: u.email || 'admin' }; }
     } catch (e) {}
     try { const me = await base44.auth.me(); if (me) adminUser = me; } catch (e) {}
@@ -627,7 +627,11 @@ export default function AdminPanel() {
                       const allDisplayUsers = [
                         ...platformUsers,
                         ...adminCreatedUsers.filter(au => !platformUsers.some(pu => pu.login_user_id === au.login_user_id))
-                      ];
+                      ].sort((a, b) => {
+                        const dateA = new Date(a.created_date || a.timestamp || 0).getTime();
+                        const dateB = new Date(b.created_date || b.timestamp || 0).getTime();
+                        return dateB - dateA;
+                      });
 
                       return allDisplayUsers.filter(u => {
                         const searchLower = loginAttemptsSearch.toLowerCase();

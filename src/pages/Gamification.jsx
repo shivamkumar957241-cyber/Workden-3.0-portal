@@ -23,13 +23,13 @@ export default function Gamification() {
     queryKey: ['user-badges', user?.id],
     queryFn: () => base44.entities.Badge.filter({ user_id: user?.id }),
     enabled: !!user?.id,
-    initialData: []
+    placeholderData: []
   });
 
   const { data: allUsers = [] } = useQuery({
     queryKey: ['all-users'],
     queryFn: () => base44.entities.User.list(),
-    initialData: []
+    placeholderData: []
   });
 
   const userPoints = user?.gamification_points || 0;

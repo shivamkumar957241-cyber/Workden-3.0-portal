@@ -10,7 +10,7 @@ export default function Holidays() {
   const { data: holidays = [] } = useQuery({
     queryKey: ['holidays'],
     queryFn: () => base44.entities.Holiday.list('holiday_date'),
-    initialData: []
+    placeholderData: []
   });
 
   const activeHolidays = holidays.filter(h => h.is_active);

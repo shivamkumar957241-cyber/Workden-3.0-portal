@@ -22,7 +22,7 @@ export default function Support() {
   const [currentUser, setCurrentUser] = React.useState(null);
 
   React.useEffect(() => {
-    const savedUser = localStorage.getItem('workden_user');
+    const savedUser = localStorage.getItem('workden_3_user');
     if (savedUser) {
       try { setCurrentUser(JSON.parse(savedUser)); } catch(e) {}
     }

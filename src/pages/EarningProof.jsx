@@ -16,7 +16,7 @@ export default function EarningProof() {
   const { data: globalSettings = [] } = useQuery({
     queryKey: ['global-settings'],
     queryFn: () => base44.entities.GlobalSettings.list(),
-    initialData: []
+    placeholderData: []
   });
 
   const getEmbedUrl = (url) => {

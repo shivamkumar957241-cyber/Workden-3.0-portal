@@ -41,17 +41,17 @@ export default function TrainingModule() {
 
   const loadUser = async () => {
     try {
-      const userSource = localStorage.getItem('workden_user_source');
-      const savedUserId = localStorage.getItem('workden_login_id');
+      const userSource = localStorage.getItem('workden_3_user_source');
+      const savedUserId = localStorage.getItem('workden_3_login_id');
       if (userSource === 'appuser' && savedUserId) {
         const appUsers = await base44.entities.AppUser.filter({ login_user_id: savedUserId });
         if (appUsers?.length > 0) { setUser(appUsers[0]); return; }
       }
-      const savedUser = localStorage.getItem('workden_user');
+      const savedUser = localStorage.getItem('workden_3_user');
       if (savedUser) { setUser(JSON.parse(savedUser)); return; }
       setUser(await base44.auth.me());
     } catch (error) {
-      const savedUser = localStorage.getItem('workden_user');
+      const savedUser = localStorage.getItem('workden_3_user');
       if (savedUser) setUser(JSON.parse(savedUser));
     }
   };
@@ -59,19 +59,19 @@ export default function TrainingModule() {
   const { data: trainingVideos = [] } = useQuery({
     queryKey: ['training-videos'],
     queryFn: () => base44.entities.TrainingVideo.list('order'),
-    initialData: [],
+    placeholderData: [],
   });
 
   const { data: tasks = [] } = useQuery({
     queryKey: ['tasks'],
     queryFn: () => base44.entities.Task.list(),
-    initialData: [],
+    placeholderData: [],
   });
 
   const { data: globalSettings = [] } = useQuery({
     queryKey: ['global-settings'],
     queryFn: () => base44.entities.GlobalSettings.list(),
-    initialData: [],
+    placeholderData: [],
   });
 
   const videosByTask = {};

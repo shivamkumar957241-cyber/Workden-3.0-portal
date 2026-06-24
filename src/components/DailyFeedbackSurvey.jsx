@@ -54,7 +54,7 @@ export default function DailyFeedbackSurvey() {
     }
     
     // Don't show if tasks are locked (user not subscribed)
-    const cachedUser = localStorage.getItem('workden_user');
+    const cachedUser = localStorage.getItem('workden_3_user');
     if (cachedUser) {
       try {
         const userData = JSON.parse(cachedUser);
@@ -77,7 +77,7 @@ export default function DailyFeedbackSurvey() {
     setSubmitting(true);
     try {
       // Get user from localStorage first (works for AppUser too)
-      const cachedUser = localStorage.getItem('workden_user');
+      const cachedUser = localStorage.getItem('workden_3_user');
       let userId = 'anonymous';
       let userName = 'User';
 

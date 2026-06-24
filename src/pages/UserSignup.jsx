@@ -39,7 +39,7 @@ export default function UserSignup() {
         
         // If user already has login credentials set, redirect to login page
         if (user && user.login_user_id && user.login_password) {
-          window.location.href = createPageUrl("UserLogin");
+          window.location.href = "#" + createPageUrl("UserLogin");
           return;
         }
         
@@ -136,7 +136,7 @@ export default function UserSignup() {
       
       // After 3 seconds, redirect to login page (keep user logged in)
       setTimeout(() => {
-        window.location.href = createPageUrl("UserLogin");
+        window.location.href = "#" + createPageUrl("UserLogin");
       }, 3000);
     } catch (error) {
       console.error("Signup error:", error);

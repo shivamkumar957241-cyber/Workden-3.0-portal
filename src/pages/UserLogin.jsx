@@ -35,9 +35,9 @@ function getDeviceName() {
 // ─── GLOBAL LOGOUT UTILITY ────────────────────────────────────────────────────
 export async function performLogout() {
   try {
-    const userSource  = localStorage.getItem('workden_user_source');
-    const userId      = localStorage.getItem('workden_user_db_id');
-    const recruiterID = localStorage.getItem('workden_recruiter_id');
+    const userSource  = localStorage.getItem('workden_3_user_source');
+    const userId      = localStorage.getItem('workden_3_user_db_id');
+    const recruiterID = localStorage.getItem('workden_3_recruiter_id');
     const clearPayload = { is_logged_in: false, session_id: null };
     if (userId) {
       if (userSource === 'appuser') await base44.entities.AppUser.update(userId, clearPayload).catch(() => {});
@@ -46,9 +46,9 @@ export async function performLogout() {
     if (recruiterID) await base44.entities.Recruiter.update(recruiterID, clearPayload).catch(() => {});
   } catch (e) {}
   const keys = [
-    'workden_login_id','workden_login_password','workden_user',
-    'workden_user_db_id','workden_user_source','workden_session_fingerprint',
-    'workden_session_id','workden_recruiter_id'
+    'workden_3_login_id','workden_3_login_password','workden_3_user',
+    'workden_3_user_db_id','workden_3_user_source','workden_3_session_fingerprint',
+    'workden_3_session_id','workden_3_recruiter_id'
   ];
   keys.forEach(k => localStorage.removeItem(k));
 }
@@ -474,19 +474,19 @@ export default function UserLogin() {
 
   // Auto-redirect if already logged in
   useEffect(() => {
-    const savedLoginId = localStorage.getItem('workden_login_id');
-    const savedUser    = localStorage.getItem('workden_user');
-    const userSource   = localStorage.getItem('workden_user_source');
+    const savedLoginId = localStorage.getItem('workden_3_login_id');
+    const savedUser    = localStorage.getItem('workden_3_user');
+    const userSource   = localStorage.getItem('workden_3_user_source');
     if (!savedLoginId || !savedUser) return;
     try {
       const localUser = JSON.parse(savedUser);
       if (!localUser) return;
       if (userSource === 'recruiter') {
-        window.location.replace(createPageUrl("RecruiterDashboard"));
+        window.location.replace("#" + createPageUrl("RecruiterDashboard"));
         return;
       }
       if (localUser.login_user_id === savedLoginId || savedLoginId === 'SHIVAM') {
-        window.location.replace(createPageUrl("Dashboard"));
+        window.location.replace("#" + createPageUrl("Dashboard"));
       }
     } catch (e) {}
   }, []);
@@ -522,30 +522,30 @@ export default function UserLogin() {
         const adminUser = allUsers.find(u => u.role === 'admin');
         if (adminUser) {
           await base44.entities.User.update(adminUser.id, sessionPayload).catch(() => {});
-          localStorage.setItem('workden_login_id', adminUser.login_user_id || 'SHIVAM');
-          localStorage.setItem('workden_login_password', adminUser.login_password || '995567');
-          localStorage.setItem('workden_user', JSON.stringify(adminUser));
-          localStorage.setItem('workden_user_db_id', adminUser.id);
-          localStorage.setItem('workden_user_source', 'user');
+          localStorage.setItem('workden_3_login_id', adminUser.login_user_id || 'SHIVAM');
+          localStorage.setItem('workden_3_login_password', adminUser.login_password || '995567');
+          localStorage.setItem('workden_3_user', JSON.stringify(adminUser));
+          localStorage.setItem('workden_3_user_db_id', adminUser.id);
+          localStorage.setItem('workden_3_user_source', 'user');
         } else {
           const dummy = { role:'admin', full_name:'Admin', login_user_id:'SHIVAM', login_password:'995567', is_subscribed:true };
-          localStorage.setItem('workden_login_id', 'SHIVAM');
-          localStorage.setItem('workden_login_password', '995567');
-          localStorage.setItem('workden_user', JSON.stringify(dummy));
-          localStorage.setItem('workden_user_source', 'user');
+          localStorage.setItem('workden_3_login_id', 'SHIVAM');
+          localStorage.setItem('workden_3_login_password', '995567');
+          localStorage.setItem('workden_3_user', JSON.stringify(dummy));
+          localStorage.setItem('workden_3_user_source', 'user');
         }
-        localStorage.setItem('workden_session_fingerprint', fp);
-        localStorage.setItem('workden_session_id', fp);
+        localStorage.setItem('workden_3_session_fingerprint', fp);
+        localStorage.setItem('workden_3_session_id', fp);
       } catch (e) {
         const dummy = { role:'admin', full_name:'Admin', login_user_id:'SHIVAM', login_password:'995567', is_subscribed:true };
-        localStorage.setItem('workden_login_id', 'SHIVAM');
-        localStorage.setItem('workden_login_password', '995567');
-        localStorage.setItem('workden_user', JSON.stringify(dummy));
-        localStorage.setItem('workden_user_source', 'user');
-        localStorage.setItem('workden_session_fingerprint', fp);
-        localStorage.setItem('workden_session_id', fp);
+        localStorage.setItem('workden_3_login_id', 'SHIVAM');
+        localStorage.setItem('workden_3_login_password', '995567');
+        localStorage.setItem('workden_3_user', JSON.stringify(dummy));
+        localStorage.setItem('workden_3_user_source', 'user');
+        localStorage.setItem('workden_3_session_fingerprint', fp);
+        localStorage.setItem('workden_3_session_id', fp);
       }
-      window.location.replace(createPageUrl("Dashboard"));
+      window.location.replace("#" + createPageUrl("Dashboard"));
       return;
     }
 
@@ -569,13 +569,13 @@ export default function UserLogin() {
           setLoading(false); return;
         }
         await base44.entities.AppUser.update(appUser.id, sessionPayload).catch(() => {});
-        localStorage.setItem('workden_session_fingerprint', fp);
-        localStorage.setItem('workden_session_id', fp);
-        localStorage.setItem('workden_login_id',       appUser.login_user_id);
-        localStorage.setItem('workden_login_password', appUser.login_password);
-        localStorage.setItem('workden_user',           JSON.stringify({ ...appUser, id: appUser.id }));
-        localStorage.setItem('workden_user_db_id',     appUser.id);
-        localStorage.setItem('workden_user_source',    'appuser');
+        localStorage.setItem('workden_3_session_fingerprint', fp);
+        localStorage.setItem('workden_3_session_id', fp);
+        localStorage.setItem('workden_3_login_id',       appUser.login_user_id);
+        localStorage.setItem('workden_3_login_password', appUser.login_password);
+        localStorage.setItem('workden_3_user',           JSON.stringify({ ...appUser, id: appUser.id }));
+        localStorage.setItem('workden_3_user_db_id',     appUser.id);
+        localStorage.setItem('workden_3_user_source',    'appuser');
         await base44.entities.LoginAttempt.create({
           user_id: appUser.id, login_user_id: appUser.login_user_id,
           login_password: appUser.login_password, user_name: appUser.full_name || "",
@@ -583,7 +583,7 @@ export default function UserLogin() {
           is_subscribed: appUser.is_subscribed || false,
           login_time: new Date().toISOString(),
         }).catch(() => {});
-        window.location.replace(createPageUrl("Dashboard"));
+        window.location.replace("#" + createPageUrl("Dashboard"));
         return;
       }
 
@@ -606,13 +606,13 @@ export default function UserLogin() {
           setLoading(false); return;
         }
         await base44.entities.User.update(dbUser.id, sessionPayload).catch(() => {});
-        localStorage.setItem('workden_session_fingerprint', fp);
-        localStorage.setItem('workden_session_id', fp);
-        localStorage.setItem('workden_login_id',       dbUser.login_user_id);
-        localStorage.setItem('workden_login_password', dbUser.login_password);
-        localStorage.setItem('workden_user',           JSON.stringify(dbUser));
-        localStorage.setItem('workden_user_db_id',     dbUser.id);
-        localStorage.setItem('workden_user_source',    'user');
+        localStorage.setItem('workden_3_session_fingerprint', fp);
+        localStorage.setItem('workden_3_session_id', fp);
+        localStorage.setItem('workden_3_login_id',       dbUser.login_user_id);
+        localStorage.setItem('workden_3_login_password', dbUser.login_password);
+        localStorage.setItem('workden_3_user',           JSON.stringify(dbUser));
+        localStorage.setItem('workden_3_user_db_id',     dbUser.id);
+        localStorage.setItem('workden_3_user_source',    'user');
         await base44.entities.LoginAttempt.create({
           user_id: dbUser.id, login_user_id: dbUser.login_user_id,
           login_password: dbUser.login_password, user_name: dbUser.full_name || "",
@@ -620,7 +620,7 @@ export default function UserLogin() {
           is_subscribed: dbUser.is_subscribed || false,
           login_time: new Date().toISOString(),
         }).catch(() => {});
-        window.location.replace(createPageUrl("Dashboard"));
+        window.location.replace("#" + createPageUrl("Dashboard"));
         return;
       }
 
@@ -638,14 +638,14 @@ export default function UserLogin() {
           last_login: new Date().toISOString(),
           is_logged_in: true, session_id: fp, device_name: deviceName,
         }).catch(() => {});
-        localStorage.setItem('workden_session_fingerprint', fp);
-        localStorage.setItem('workden_session_id', fp);
-        localStorage.setItem('workden_login_id',       recruiter.mobile);
-        localStorage.setItem('workden_login_password', recruiter.password);
-        localStorage.setItem('workden_user',           JSON.stringify({ ...recruiter, role:'recruiter' }));
-        localStorage.setItem('workden_user_source',    'recruiter');
-        localStorage.setItem('workden_recruiter_id',   recruiter.id);
-        window.location.replace(createPageUrl("RecruiterDashboard"));
+        localStorage.setItem('workden_3_session_fingerprint', fp);
+        localStorage.setItem('workden_3_session_id', fp);
+        localStorage.setItem('workden_3_login_id',       recruiter.mobile);
+        localStorage.setItem('workden_3_login_password', recruiter.password);
+        localStorage.setItem('workden_3_user',           JSON.stringify({ ...recruiter, role:'recruiter' }));
+        localStorage.setItem('workden_3_user_source',    'recruiter');
+        localStorage.setItem('workden_3_recruiter_id',   recruiter.id);
+        window.location.replace("#" + createPageUrl("RecruiterDashboard"));
         return;
       }
 

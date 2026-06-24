@@ -46,11 +46,44 @@ export default function BannersTab({ globalSettings }) {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(settingKey);
-    try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      await saveSetting(settingKey, file_url);
-      alert("✅ Image uploaded!");
-    } catch { alert("❌ Upload failed"); } finally { setUploading(false); }
+      try {
+        const formData = new FormData();
+        formData.append("image", file);
+        
+        const data = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("POST", "https://api.imgbb.com/1/upload?key=f884150e62a96137e936d460c00297d1");
+          
+          xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+              const percentComplete = Math.round((event.loaded / event.total) * 100);
+              setUploading(`${settingKey}_${percentComplete}`);
+            }
+          };
+          
+          xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              try { resolve(JSON.parse(xhr.responseText)); } catch(e) { reject("Invalid JSON"); }
+            } else {
+              try { reject(JSON.parse(xhr.responseText).error?.message || "Upload failed"); } catch(e) { reject("Upload failed"); }
+            }
+          };
+          
+          xhr.onerror = () => reject("Network error or CORS issue");
+          xhr.send(formData);
+        });
+
+        if (data.success) {
+          setUploading(settingKey); // switch back to indeterminate state for saving
+          await saveSetting(settingKey, data.data.url);
+          alert("✨ Image uploaded!");
+        } else {
+          throw new Error("ImgBB upload failed");
+        }
+      } catch (err) { 
+        console.error("Upload error:", err); 
+        alert("❌ Upload failed: " + (err.message || err)); 
+      } finally { setUploading(false); }
   };
 
   return (
@@ -144,12 +177,12 @@ export default function BannersTab({ globalSettings }) {
                     </button>
                   </div>
                 )}
-                <div className="flex gap-2">
-                  <label className={`flex-1 cursor-pointer flex items-center justify-center gap-2 p-3 bg-purple-50 hover:bg-purple-100 border-2 border-purple-200 rounded-lg text-sm font-semibold text-purple-700 ${uploading === key ? 'opacity-50' : ''}`}>
-                    {uploading === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                    {uploading === key ? 'Uploading...' : 'Upload Banner Image'}
-                    <input type="file" accept="image/*" className="hidden" disabled={uploading === key} onChange={(e) => handleImageUpload(e, key)} />
-                  </label>
+                  <div className="flex gap-2">
+                    <label className={`flex-1 cursor-pointer flex items-center justify-center gap-2 p-3 bg-purple-50 hover:bg-purple-100 border-2 border-purple-200 rounded-lg text-sm font-semibold text-purple-700 ${uploading ? 'opacity-50' : ''}`}>
+                      {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                      {uploading === key ? 'Saving...' : (typeof uploading === 'string' && uploading.startsWith(key + '_') ? `Uploading ${uploading.split('_')[1]}%` : 'Upload Banner Image')}
+                      <input type="file" accept="image/*" className="hidden" disabled={!!uploading} onChange={(e) => handleImageUpload(e, key)} />
+                    </label>
                   <div className="flex-1">
                     <Input
                       placeholder="Or paste image URL..."

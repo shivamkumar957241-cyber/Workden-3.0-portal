@@ -14,7 +14,7 @@ export default function SignatureSubmissionsTab() {
   const { data: signatures = [] } = useQuery({
     queryKey: ['terms-acceptances'],
     queryFn: () => base44.entities.TermsAcceptance.list('-accepted_date'),
-    initialData: [],
+    placeholderData: [],
     refetchInterval: 15000
   });
 

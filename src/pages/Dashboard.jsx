@@ -22,13 +22,13 @@ export default function Dashboard() {
   const { data: globalSettings = [] } = useQuery({
     queryKey: ['global-settings'],
     queryFn: () => base44.entities.GlobalSettings.list(),
-    initialData: []
+    placeholderData: []
   });
 
   const { data: allAppUsers = [] } = useQuery({
     queryKey: ['app-users-earnings'],
     queryFn: () => base44.entities.AppUser.list(),
-    initialData: [],
+    placeholderData: [],
     enabled: showTopEarners
   });
 
@@ -41,14 +41,14 @@ export default function Dashboard() {
   const loadData = async () => {
     try {
       let currentUser = null;
-      const userSource = localStorage.getItem('workden_user_source');
-      const savedUserId = localStorage.getItem('workden_login_id');
+      const userSource = localStorage.getItem('workden_3_user_source');
+      const savedUserId = localStorage.getItem('workden_3_login_id');
 
       if (userSource === 'appuser' && savedUserId) {
         const appUsers = await base44.entities.AppUser.filter({ login_user_id: savedUserId });
         if (appUsers?.length > 0) currentUser = appUsers[0];
       } else if (savedUserId === 'SHIVAM') {
-        const savedUser = localStorage.getItem('workden_user');
+        const savedUser = localStorage.getItem('workden_3_user');
         if (savedUser) currentUser = JSON.parse(savedUser);
         if (!currentUser?.role) { try { currentUser = await base44.auth.me(); } catch (e) {} }
       } else {
@@ -56,7 +56,7 @@ export default function Dashboard() {
       }
 
       if (!currentUser) {
-        const saved = localStorage.getItem('workden_user');
+        const saved = localStorage.getItem('workden_3_user');
         if (saved) currentUser = JSON.parse(saved);
       }
       if (!currentUser) return;

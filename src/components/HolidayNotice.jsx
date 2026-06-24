@@ -20,7 +20,7 @@ export default function HolidayNotice() {
   const { data: globalSettings = [] } = useQuery({
     queryKey: ['global-settings'],
     queryFn: () => base44.entities.GlobalSettings.list(),
-    initialData: [],
+    placeholderData: [],
     refetchInterval: 30000
   });
 
@@ -30,7 +30,7 @@ export default function HolidayNotice() {
   const { data: holidays = [] } = useQuery({
     queryKey: ['active-holidays'],
     queryFn: () => base44.entities.Holiday.list(),
-    initialData: [],
+    placeholderData: [],
     refetchInterval: 60000,
     enabled: holidayDisplayEnabled // Only fetch if enabled
   });

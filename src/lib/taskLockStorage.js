@@ -1,7 +1,7 @@
 // Task Lock Storage - localStorage based strict locking system
 
 export function getTaskLockKey(taskName) {
-  const userId = localStorage.getItem('workden_login_id') || 'guest';
+  const userId = localStorage.getItem('workden_3_login_id') || 'guest';
   return `workden_task_lock_${userId}_${taskName.replace(/\s+/g, '_')}`;
 }
 

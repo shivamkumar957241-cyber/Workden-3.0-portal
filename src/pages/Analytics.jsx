@@ -9,9 +9,9 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
 export default function Analytics() {
-  const { data: users = [] } = useQuery({ queryKey: ['all-users'], queryFn: () => base44.entities.User.list(), initialData: [] });
-  const { data: proofs = [] } = useQuery({ queryKey: ['all-proofs'], queryFn: () => base44.entities.Proof.list(), initialData: [] });
-  const { data: withdrawals = [] } = useQuery({ queryKey: ['withdrawals'], queryFn: () => base44.entities.WithdrawalRequest.list(), initialData: [] });
+  const { data: users = [] } = useQuery({ queryKey: ['all-users'], queryFn: () => base44.entities.User.list(), placeholderData: [] });
+  const { data: proofs = [] } = useQuery({ queryKey: ['all-proofs'], queryFn: () => base44.entities.Proof.list(), placeholderData: [] });
+  const { data: withdrawals = [] } = useQuery({ queryKey: ['withdrawals'], queryFn: () => base44.entities.WithdrawalRequest.list(), placeholderData: [] });
 
   const totalEarnings = users.reduce((sum, u) => sum + Number(u.total_earnings || 0), 0);
   const totalWithdrawals = withdrawals.filter(w => w.status === 'completed').reduce((sum, w) => sum + Number(w.amount || 0), 0);

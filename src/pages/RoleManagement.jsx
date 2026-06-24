@@ -31,7 +31,7 @@ export default function RoleManagement() {
   const { data: users = [] } = useQuery({ 
     queryKey: ['all-users'], 
     queryFn: () => base44.entities.User.list(), 
-    initialData: [] 
+    placeholderData: [] 
   });
 
   const updateRoleMutation = useMutation({

@@ -23,7 +23,7 @@ export default function RecruiterPortal() {
   const { data: users = [] } = useQuery({ 
     queryKey: ['all-users'], 
     queryFn: () => base44.entities.User.list(), 
-    initialData: [], 
+    placeholderData: [], 
     refetchInterval: 10000,
     enabled: authenticated 
   });
@@ -31,7 +31,7 @@ export default function RecruiterPortal() {
   const { data: proofs = [] } = useQuery({ 
     queryKey: ['all-proofs'], 
     queryFn: () => base44.entities.Proof.list('-created_date'), 
-    initialData: [], 
+    placeholderData: [], 
     refetchInterval: 5000,
     enabled: authenticated 
   });
@@ -39,7 +39,7 @@ export default function RecruiterPortal() {
   const { data: recruiters = [] } = useQuery({ 
     queryKey: ['recruiters'], 
     queryFn: () => base44.entities.Recruiter.list(), 
-    initialData: [], 
+    placeholderData: [], 
     enabled: authenticated 
   });
 

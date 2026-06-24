@@ -30,7 +30,7 @@ export default function SubmittedWork() {
   const { data: globalSettings = [] } = useQuery({
     queryKey: ['global-settings'],
     queryFn: () => base44.entities.GlobalSettings.list(),
-    initialData: []
+    placeholderData: []
   });
 
   const taskHistoryVideoUrl = globalSettings.find(s => s.setting_key === 'task_history_video')?.setting_value;
@@ -62,18 +62,18 @@ export default function SubmittedWork() {
 
   const loadUser = async () => {
     try {
-      const userSource = localStorage.getItem('workden_user_source');
-      const savedUserId = localStorage.getItem('workden_login_id');
+      const userSource = localStorage.getItem('workden_3_user_source');
+      const savedUserId = localStorage.getItem('workden_3_login_id');
       if (userSource === 'appuser' && savedUserId) {
         const appUsers = await base44.entities.AppUser.filter({ login_user_id: savedUserId });
         if (appUsers?.length > 0) { setUser(appUsers[0]); return; }
       }
-      const savedUser = localStorage.getItem('workden_user');
+      const savedUser = localStorage.getItem('workden_3_user');
       if (savedUser) { setUser(JSON.parse(savedUser)); return; }
       const currentUser = await base44.auth.me();
       setUser(currentUser);
     } catch (error) {
-      const savedUser = localStorage.getItem('workden_user');
+      const savedUser = localStorage.getItem('workden_3_user');
       if (savedUser) setUser(JSON.parse(savedUser));
     }
   };
@@ -82,7 +82,7 @@ export default function SubmittedWork() {
     queryKey: ['my-proofs', user?.id],
     queryFn: () => base44.entities.Proof.filter({ user_id: user?.id }, '-submitted_date', 50),
     enabled: !!user?.id,
-    initialData: [],
+    placeholderData: [],
     refetchInterval: 30000,
   });
 

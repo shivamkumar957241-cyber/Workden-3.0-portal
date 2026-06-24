@@ -51,14 +51,14 @@ export default function Referrals() {
     queryKey: ['user-referrals', user?.id],
     queryFn: () => base44.entities.Referral.filter({ referrer_id: user?.id }),
     enabled: !!user?.id && isUnlocked,
-    initialData: []
+    placeholderData: []
   });
 
   const { data: allProofs = [] } = useQuery({
     queryKey: ['all-proofs-referrals'],
     queryFn: () => base44.entities.Proof.list(),
     enabled: !!user?.id && isUnlocked,
-    initialData: []
+    placeholderData: []
   });
 
   const transferBonusMutation = useMutation({

@@ -116,15 +116,15 @@ export default function Typing() {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const userSource = localStorage.getItem('workden_user_source');
-        const savedUserId = localStorage.getItem('workden_login_id');
+        const userSource = localStorage.getItem('workden_3_user_source');
+        const savedUserId = localStorage.getItem('workden_3_login_id');
         if (userSource === 'appuser' && savedUserId) {
           const users = await base44.entities.AppUser.filter({ login_user_id: savedUserId });
           if (users?.length > 0) { setUser(users[0]); return; }
         }
         setUser(await base44.auth.me());
       } catch (e) {
-        const saved = localStorage.getItem('workden_user');
+        const saved = localStorage.getItem('workden_3_user');
         if (saved) setUser(JSON.parse(saved));
       }
     };

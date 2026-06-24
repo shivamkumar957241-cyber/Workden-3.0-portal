@@ -38,7 +38,7 @@ export default function TasksPage() {
   const { data: globalSettings = [] } = useQuery({
     queryKey: ['global-settings'],
     queryFn: () => base44.entities.GlobalSettings.list(),
-    initialData: []
+    placeholderData: []
   });
 
   const convertDriveUrl = (url) => {
@@ -59,7 +59,7 @@ export default function TasksPage() {
   const paymentLink = globalSettings.find(s => s.setting_key === 'payment_link')?.setting_value || "https://razorpay.me/@WorkDen";
 
   useEffect(() => {
-    const cachedUser = localStorage.getItem('workden_user');
+    const cachedUser = localStorage.getItem('workden_3_user');
     const cachedTasks = localStorage.getItem('workden_tasks');
     if (cachedUser) { try { setCurrentUser(JSON.parse(cachedUser)); } catch(e) {} }
     if (cachedTasks) { try { setTasks(JSON.parse(cachedTasks)); } catch(e) {} }
@@ -78,21 +78,21 @@ export default function TasksPage() {
   };
 
   const loadData = async () => {
-    const savedUserStr = localStorage.getItem('workden_user');
-    const savedUserSource = localStorage.getItem('workden_user_source');
+    const savedUserStr = localStorage.getItem('workden_3_user');
+    const savedUserSource = localStorage.getItem('workden_3_user_source');
     let user = null;
     if (savedUserSource === 'appuser' && savedUserStr) {
       try {
         user = JSON.parse(savedUserStr);
         setCurrentUser(user);
         const dbUsers = await base44.entities.AppUser.filter({ id: user.id });
-        if (dbUsers?.length > 0) { user = dbUsers[0]; setCurrentUser(user); localStorage.setItem('workden_user', JSON.stringify(user)); }
+        if (dbUsers?.length > 0) { user = dbUsers[0]; setCurrentUser(user); localStorage.setItem('workden_3_user', JSON.stringify(user)); }
       } catch (e) {}
     } else {
       try {
         user = await base44.auth.me();
         setCurrentUser(user);
-        localStorage.setItem('workden_user', JSON.stringify(user));
+        localStorage.setItem('workden_3_user', JSON.stringify(user));
       } catch (error) {
         if (savedUserStr) { try { user = JSON.parse(savedUserStr); setCurrentUser(user); } catch (e) {} }
       }
