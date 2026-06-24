@@ -58,7 +58,7 @@ export default function TrainingModule() {
 
   const { data: trainingVideos = [] } = useQuery({
     queryKey: ['training-videos'],
-    queryFn: () => base44.entities.TrainingVideo.list('order'),
+    queryFn: () => base44.entities.TrainingVideo.list(),
     placeholderData: [],
   });
 
@@ -114,7 +114,8 @@ export default function TrainingModule() {
     "from-amber-500 to-orange-500",
   ];
 
-  if (user && !user.training_access) {
+  const isAdmin = localStorage.getItem('workden_3_login_id') === 'SHIVAM' || user?.role === 'admin';
+  if (user && !user.training_access && !isAdmin) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-4 md:p-8 pb-24">
         <div className="max-w-2xl mx-auto">
