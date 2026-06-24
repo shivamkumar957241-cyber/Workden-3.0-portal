@@ -62,14 +62,6 @@ export default function TaskNavigationWarning() {
       setShowWarning(true);
     };
 
-    // Intercept browser back/forward button
-    const handlePopState = () => {
-      if (!isActiveRef.current) return;
-      window.history.pushState(null, '', window.location.href);
-      pendingDest.current = '/Tasks';
-      setShowWarning(true);
-    };
-
     // Intercept keyboard shortcuts (Escape key especially)
     const handleKeyDown = (e) => {
       if (!isActiveRef.current) return;
@@ -82,12 +74,10 @@ export default function TaskNavigationWarning() {
     };
 
     document.addEventListener('click', handleClick, true);
-    window.addEventListener('popstate', handlePopState);
     document.addEventListener('keydown', handleKeyDown, true);
 
     return () => {
       document.removeEventListener('click', handleClick, true);
-      window.removeEventListener('popstate', handlePopState);
       document.removeEventListener('keydown', handleKeyDown, true);
     };
   }, [isTaskActive]);

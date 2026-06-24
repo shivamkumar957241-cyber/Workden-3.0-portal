@@ -161,7 +161,7 @@ export default function Typing() {
         const lockUntil = new Date();
         lockUntil.setDate(lockUntil.getDate() + 1);
         lockUntil.setHours(9, 0, 0, 0);
-        const existing = await base44.entities.ActiveTask.filter({ user_id: user?.id, status: 'active' });
+        const existing = await base44.entities.ActiveTask.filter({ user_id: user?.id, status: 'active' }, TASK_NAME);
         if (existing?.length > 0) {
           await base44.entities.ActiveTask.update(existing[0].id, { status: 'locked', locked_until: lockUntil.toISOString(), lock_reason: 'incomplete' });
         }

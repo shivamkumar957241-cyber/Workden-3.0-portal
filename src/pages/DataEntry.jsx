@@ -222,6 +222,7 @@ export default function DataEntry() {
         };
         stopTaskActivity(currentSessionId, 'ABANDONED', behaviorData).catch(() => {});
         stopTracking(false, true).catch(() => {});
+          setTaskLocked(TASK_NAME); // Auto-lock on back
 
         sessionStorage.removeItem(`task_start_${TASK_NAME}`);
         sessionStorage.removeItem(`task_session_${TASK_NAME}`);
@@ -273,7 +274,7 @@ export default function DataEntry() {
         const lockUntil = new Date();
         lockUntil.setDate(lockUntil.getDate() + 1);
         lockUntil.setHours(9, 0, 0, 0);
-        const existing = await base44.entities.ActiveTask.filter({ user_id: userRef.current?.id, status: 'active' });
+        const existing = await base44.entities.ActiveTask.filter({ user_id: userRef.current?.id, status: 'active' }, TASK_NAME);
         if (existing?.length > 0) {
           await base44.entities.ActiveTask.update(existing[0].id, {
             status: 'locked',

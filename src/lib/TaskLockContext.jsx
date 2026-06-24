@@ -82,7 +82,7 @@ export function TaskLockProvider({ children }) {
     lockingRef.current = false;
     sessionStorage.removeItem('workden_task_active');
     sessionStorage.removeItem('workden_active_task_name');
-    window.location.href = destination || '/Tasks';
+    window.location.hash = destination || '/Tasks';
   }, [performLock]);
 
   const isTaskActive = !!lockConfig;

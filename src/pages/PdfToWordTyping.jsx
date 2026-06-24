@@ -235,6 +235,7 @@ export default function PdfToWordTyping() {
       unregisterTask();
       if (startTime && currentSessionIdRef.current) {
         stopTracking(false, true).catch(() => {});
+          setTaskLocked(TASK_NAME); // Auto-lock on back
         sessionStorage.removeItem(`task_start_${TASK_NAME}`);
         sessionStorage.removeItem(`task_session_${TASK_NAME}`);
         sessionStorage.removeItem('workden_active_task_name');
@@ -261,7 +262,7 @@ export default function PdfToWordTyping() {
         const lockUntil = new Date();
         lockUntil.setDate(lockUntil.getDate() + 1);
         lockUntil.setHours(9, 0, 0, 0);
-        const existing = await base44.entities.ActiveTask.filter({ user_id: user?.id, status: 'active' });
+        const existing = await base44.entities.ActiveTask.filter({ user_id: user?.id, status: 'active' }, TASK_NAME);
         if (existing?.length > 0) {
           await base44.entities.ActiveTask.update(existing[0].id, { status: 'locked', locked_until: lockUntil.toISOString(), lock_reason: 'incomplete' });
         }
