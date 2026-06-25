@@ -9,10 +9,6 @@ const __dirname = path.dirname(__filename)
 // https://vite.dev/config/
 export default defineConfig({
   base: './',
-  build: {
-    outDir: '../Workden3.0',
-    emptyOutDir: true
-  },
   plugins: [
     react(),
   ],
